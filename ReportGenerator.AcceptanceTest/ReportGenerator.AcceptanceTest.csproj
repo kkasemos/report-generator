@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="Generate_Company_A_Steps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportGeneratorDriver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

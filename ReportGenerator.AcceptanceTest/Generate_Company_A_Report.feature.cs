@@ -215,9 +215,13 @@ this.ScenarioSetup(scenarioInfo);
                         "1"});
 #line 45
  testRunner.Then("Output is", ((string)(null)), table6, "Then ");
-#line hidden
 #line 49
- testRunner.And("Error log file contains", "Product A records have different amounts", ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Error message \"Error occurred, please see the error.log file\" displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 50
+ testRunner.And("Error log file is \"error.log\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 51
+ testRunner.And("Error log file contains", "Product B records have different amounts", ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

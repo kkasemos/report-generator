@@ -46,7 +46,9 @@ Scenario: The same product name has different amounts
 		| Product Name | Amount | Qty |
 		| Product A    | 100    | 2   |
 		| Product C    | 300    | 1   |
+	And Error message "Error occurred, please see the error.log file" displayed
+	And Error log file is "error.log"
 	And Error log file contains
 	"""
-	Product A records have different amounts
+	Product B records have different amounts
 	"""

@@ -1,8 +1,5 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using TechTalk.SpecFlow;
 
@@ -11,14 +8,14 @@ namespace ReportGenerator.AcceptanceTest
     [Binding]
     public sealed class Generate_Company_A_Steps
     {
-        private ReportGenerator reportGenerator;
         private StringBuilder stringBuilder;
-        private string outputString;
+        private ReportGeneratorDriver driver = new ReportGeneratorDriver();
+        private string message;
+        private string logFileName;
 
         [Given(@"Input is")]
         public void GivenInputIs(Table table)
         {
-            reportGenerator = new ReportGenerator();
             stringBuilder = new StringBuilder();
 
             foreach (var row in table.Rows)
@@ -34,12 +31,16 @@ namespace ReportGenerator.AcceptanceTest
         [When(@"It generates a report")]
         public void WhenItGeneratesAReport()
         {
-            outputString = reportGenerator.Generate(stringBuilder.ToString());
+            string tempFileName = Path.GetTempFileName();
+
+            File.WriteAllText(tempFileName, stringBuilder.ToString());
+            driver.GenerateReport(tempFileName, out message);
         }
 
         [Then(@"Output is")]
         public void ThenOutputIs(Table table)
         {
+            var outputString = File.ReadAllText("out.txt");
             var expectedStringBuilder = new StringBuilder();
 
             foreach (var row in table.Rows)
@@ -53,6 +54,26 @@ namespace ReportGenerator.AcceptanceTest
             }
 
             Assert.AreEqual(expectedStringBuilder.ToString(), outputString);
+        }
+
+        [Then(@"Error message ""(.*)"" displayed")]
+        public void ThenErrorMessageDisplayed(string expectedMsg)
+        {
+            Assert.AreEqual(expectedMsg, message.Trim());
+        }
+
+        [Then(@"Error log file is ""(.*)""")]
+        public void ThenErrorLogFileIs(string expectedLogFileName)
+        {
+            logFileName = expectedLogFileName;
+            Assert.IsTrue(File.Exists(expectedLogFileName));
+        }
+
+        [Then(@"Error log file contains")]
+        public void ThenErrorLogFileContains(string expectedContent)
+        {
+            var content = File.ReadAllText(logFileName);
+            Assert.AreEqual(expectedContent, content);
         }
     }
 }
